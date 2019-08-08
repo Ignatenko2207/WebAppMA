@@ -11,11 +11,9 @@ public class UserService {
 
     public static User getAuthUser(String login, String password){
         User user = UserDAO.findByLogin(login);
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password)){
             return user;
         }
         return null;
     }
-
-
 }

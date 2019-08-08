@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 class ConnectionToDB {
-
     private static Logger logger = Logger.getLogger(ConnectionToDB.class.getName());
+
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/shop_db_ma";
     private static final String DB_USER = "postgres";
-    private static final String DB_PASS = "248842";
+    private static final String DB_PASS = "Max05012004";
 
     protected static Connection getConnection(){
 

@@ -1,20 +1,25 @@
 package com.mainacad.dao;
+
 import com.mainacad.model.Item;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAO {
-    public static Item create(Item item) {
-        String statement = "INSERT INTO items(item_code, name, price)" +
-                "VALUES(?,?,?)";
 
-        String curIdStatement = "SELECT currval(pg_get_serial_sequence('items','id'))";
+    public static Item create(Item item){
+
+        String sql = "INSERT INTO items(item_code, name, price) " +
+                "VALUES(?,?,?)";
+        String sequenceSQL = "SELECT currval(pg_get_serial_sequence('items','id'))";
 
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement);
-             Statement seqStatement = connection.createStatement()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement sequenceStatement = connection.prepareStatement(sequenceSQL)) {
 
             preparedStatement.setString(1, item.getItemCode());
             preparedStatement.setString(2, item.getName());
@@ -22,26 +27,26 @@ public class ItemDAO {
 
             preparedStatement.executeUpdate();
 
-            ResultSet resultSet = seqStatement.executeQuery(curIdStatement);
+            ResultSet resultSet = sequenceStatement.executeQuery();
+
             while (resultSet.next()) {
                 Integer id = resultSet.getInt(1);
                 item.setId(id);
-
                 return item;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
-    public static Item update(Item item) {
-        String statement = "UPDATE items SET item_code=?, name=?, price=? WHERE id=?";
+    public static Item update(Item item){
+
+        String sql = "UPDATE items SET item_code=?, name=?, price=? WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
 
             preparedStatement.setString(1, item.getItemCode());
             preparedStatement.setString(2, item.getName());
@@ -49,140 +54,132 @@ public class ItemDAO {
             preparedStatement.setInt(4, item.getId());
 
             preparedStatement.executeUpdate();
-
             return item;
-
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Item findAll(){
+
+        String sql = "SELECT * FROM items";
+
+        try(Connection connection = ConnectionToDB.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ){
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                Item item = new Item();
+                item.setId(resultSet.getInt("id"));
+                item.setItemCode(resultSet.getString("item_code"));
+                item.setName(resultSet.getString("name"));
+                item.setPrice(resultSet.getInt("price"));
+
+                return item;
+            }
+        } catch (SQLException e){
+            e.getStackTrace();
         }
         return null;
     }
 
     public static Item findById(Integer id){
-        String statement = "SELECT * FROM items WHERE id=?";
+
+        String sql = "SELECT * FROM items WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-
-            preparedStatement.setInt(1, id);
-
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Item item = getItemFromResultSetItem(resultSet);
+                Item item = new Item();
+                item.setId(resultSet.getInt("id"));
+                item.setItemCode(resultSet.getString("item_code"));
+                item.setName(resultSet.getString("name"));
+                item.setPrice(resultSet.getInt("price"));
 
                 return item;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static List<Item> findByItemCode(String code) {
-        List<Item> items = new ArrayList<>();
+    public static Item findByItemCode(String itemCode){
 
-        String statement = "SELECT * FROM items WHERE item_code=?";
+        String sql = "SELECT * FROM items WHERE item_code=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-
-            preparedStatement.setString(1, code);
-
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ){
+            preparedStatement.setString(1,itemCode);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
+            while (resultSet.next()){
+                Item item = new Item();
+                item.setId(resultSet.getInt("id"));
+                item.setItemCode(resultSet.getString("item_code"));
+                item.setName(resultSet.getString("name"));
+                item.setPrice(resultSet.getInt("price"));
+
+                return item;
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e){
+            e.getStackTrace();
         }
-
-        return items;
+        return null;
     }
 
-    public static List<Item> findByItemPriceBetween(Integer minPrice, Integer maxPrice){
-        List<Item> items = new ArrayList<>();
+    public static void delete(Integer id){
 
-        String statement = "SELECT * FROM items WHERE price>=? AND price<=?";
-
-        try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-
-            preparedStatement.setInt(1, minPrice);
-            preparedStatement.setInt(2, maxPrice);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return items;
-    }
-
-    public static List<Item> findAll(){
-        List<Item> items = new ArrayList<>();
-
-        String statement = "SELECT * FROM items";
+        String sql = "DELETE FROM items WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return items;
-    }
-
-    public static void delete(Item item){
-        String statement = "DELETE FROM items WHERE id=?";
-
-        try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
-
-            preparedStatement.setInt(1, item.getId());
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static Item getItemFromResultSetItem(ResultSet resultSet) throws SQLException {
-        Item item = new Item();
-
-        item.setId(resultSet.getInt("id"));
-        item.setItemCode(resultSet.getString("item_code"));
-        item.setName(resultSet.getString("name"));
-        item.setPrice(resultSet.getInt("price"));
-
-        return item;
-    }
-
-    public static Integer getSumOfAllOrdersByUserIdAndPeriod(Integer userId, Long from, Long to){
-        String sql = "SELECT SUM(i.price*o.amount)FROM items i " +
+    public static List<Item> getSumOfAllOrdersByUserIdAndPeriod(Integer userId, Long from, Long to){
+        String sql = "SELECT SUM(i.price*o.amount) " + "FROM items i " +
                 "JOIN orders o ON o.item_id = i.id " +
                 "JOIN carts c ON o.cart_id = c.id " +
-                "WHERE c.user_id=? AND " +
-                "c.creation_time>? AND " +
-                "c.creation_time<? AND " +
+                "WHERE c.user_id=2 AND " +
+                "c.creation_time>1564088300000 AND " +
+                "c.creation_time<1564088500000 AND " +
                 "c.closed=true";
 
-        return null;
-    }
+        List<Item> items = new ArrayList<>();
 
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setLong(2, from);
+            preparedStatement.setLong(3, to);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Item item = new Item();
+
+                item.setPrice(resultSet.getInt("price"));
+                items.add(item);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
 }

@@ -9,10 +9,14 @@ public class CartService {
 
     public static Cart createCartForUser(Integer userId){
         Cart cart = new Cart();
+
         cart.setCreationTime(new Date().getTime());
         cart.setClosed(Boolean.FALSE);
         cart.setUserId(userId);
-        return CartDAO.create(cart);
+
+        Cart storedCart = CartDAO.create(cart);
+
+        return storedCart;
     }
 
     public static Cart findOpenCartByUser(Integer userId){

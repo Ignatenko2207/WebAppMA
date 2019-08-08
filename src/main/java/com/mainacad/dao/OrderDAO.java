@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class OrderDAO {
+public class  OrderDAO {
 
     private static Logger logger = Logger.getLogger(OrderDAO.class.getName());
+
     public static Order create(Order order){
+
         String sql = "INSERT INTO orders(item_id, amount, cart_id) VALUES(?,?,?)";
         String sequenceSql = "SELECT currval(pg_get_serial_sequence('orders','id'))";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              PreparedStatement seqStatement = connection.prepareStatement(sequenceSql)
-             ){
+        ){
 
             preparedStatement.setInt(1, order.getItemId());
             preparedStatement.setInt(2, order.getAmount());
@@ -43,6 +45,23 @@ public class OrderDAO {
     }
 
     public static Order update(Order order){
+
+        String sql = "UPDATE orders SET item_id=?, amount=?, cart_id=? WHERE id=?";
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+
+            preparedStatement.setInt(1, order.getItemId());
+            preparedStatement.setInt(2, order.getAmount());
+            preparedStatement.setInt(3, order.getCartId());
+            preparedStatement.setInt(4, order.getId());
+
+            preparedStatement.executeUpdate();
+            return order;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -127,6 +146,32 @@ public class OrderDAO {
                 "c.creation_time<=? " +
                 "ORDER BY c.creation_time";
 
-        return null;
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setLong(2, from);
+            preparedStatement.setLong(3, to);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Order order = new Order();
+
+                order.setId(resultSet.getInt("id"));
+                order.setItemId(resultSet.getInt("item_id"));
+                order.setAmount(resultSet.getInt("amount"));
+                order.setCartId(resultSet.getInt("cart_id"));
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
     }
 }
