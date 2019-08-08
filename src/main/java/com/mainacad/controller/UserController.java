@@ -30,8 +30,5 @@ public class UserController extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
             dispatcher.forward(req, resp);
         }
-
-
     }
-
 }
