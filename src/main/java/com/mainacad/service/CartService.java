@@ -4,6 +4,7 @@ import com.mainacad.dao.CartDAO;
 import com.mainacad.model.Cart;
 
 import java.util.Date;
+import java.util.List;
 
 public class CartService {
 
@@ -17,6 +18,18 @@ public class CartService {
         Cart storedCart = CartDAO.create(cart);
 
         return storedCart;
+    }
+
+    public static Cart update(Cart cart){
+        return CartDAO.update(cart);
+    }
+
+    public static List<Cart> findByUser(Integer userId){
+        return CartDAO.findByUser(userId);
+    }
+
+    public static Cart findById(Integer userId){
+        return CartDAO.findById(userId);
     }
 
     public static Cart findOpenCartByUser(Integer userId){
