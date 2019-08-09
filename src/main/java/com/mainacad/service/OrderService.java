@@ -25,16 +25,20 @@ public class OrderService {
         return OrderDAO.create(order);
     }
 
-    public static List<Order> getOrdersByCard(Cart cart){
-        return OrderDAO.findByCart(cart.getId());
+    public static Order create(Order order){
+        return OrderDAO.create(order);
+    }
+
+    public static List<Order> getOrdersByCard(Integer cartId){
+        return OrderDAO.findByCart(cartId);
     }
 
     public static Order findById(Integer id){
         return OrderDAO.findById(id);
     }
 
-    public List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
-        return OrderDAO.findClosedOrdersByUserAndPeriod(user.getId(), from, to);
+    public static List<Order> findClosedOrdersByUserAndPeriod(Integer userId, Long from, Long to){
+        return OrderDAO.findClosedOrdersByUserAndPeriod(userId, from, to);
     }
 
     public static Order update(Order order){
