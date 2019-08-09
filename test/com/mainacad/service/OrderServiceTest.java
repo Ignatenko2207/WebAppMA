@@ -1,8 +1,6 @@
 package com.mainacad.service;
 
-import com.mainacad.model.Item;
 import com.mainacad.model.Order;
-import com.mainacad.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderServiceTest {
 
     private static List<Order> orders = new ArrayList<>();
-    private static List<Item> items = new ArrayList<>();
-    private static List<User> users = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
