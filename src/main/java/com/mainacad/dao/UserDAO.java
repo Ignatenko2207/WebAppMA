@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
@@ -24,12 +25,10 @@ public class UserDAO {
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getFirstName());
             preparedStatement.setString(4, user.getLastName());
-
             preparedStatement.executeUpdate();
-
             ResultSet resultSet = sequenceStatement.executeQuery();
 
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 Integer id = resultSet.getInt(1);
                 user.setId(id);
                 return user;
@@ -43,7 +42,7 @@ public class UserDAO {
     public static User update(User user) {
         String sql = "UPDATE users SET login=?, password=?, first_name=?, last_name=? WHERE id=?";
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
             preparedStatement.setString(1, user.getLogin());
@@ -64,19 +63,13 @@ public class UserDAO {
 
         String sql = "SELECT * FROM users WHERE id=?";
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getInt("id"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                return user;
+                return getUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,19 +80,13 @@ public class UserDAO {
     public static User findByLogin(String login) {
         String sql = "SELECT * FROM users WHERE login=?";
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
-            preparedStatement.setString(1,login);
+            preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getInt("id"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                return user;
+            if (resultSet.next()) {
+                return getUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,19 +96,40 @@ public class UserDAO {
 
     public static List<User> findAll() {
         String sql = "SELECT * FROM users";
-
+        List<User> users = new ArrayList<>();
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = getUserFromResultSet(resultSet);
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     public static void delete(Integer id) {
         String sql = "DELETE FROM users WHERE id=?";
         try (Connection connection = ConnectionToDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+        User user = new User();
+        user.setId(resultSet.getInt("id"));
+        user.setLogin(resultSet.getString("login"));
+        user.setPassword(resultSet.getString("password"));
+        user.setFirstName(resultSet.getString("first_name"));
+        user.setLastName(resultSet.getString("last_name"));
+        return user;
     }
 }
