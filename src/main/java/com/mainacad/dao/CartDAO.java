@@ -44,9 +44,15 @@ public class CartDAO {
         return null;
     }
 
+    //TODO public static Cart update(Cart cart)
     public static Cart update(Cart cart){
 
         return null;
+    }
+
+    //TODO public static void delete(Integer cartId)
+    public static void delete(Integer cartId) {
+
     }
 
     public static Cart findById(Integer id){
@@ -76,6 +82,7 @@ public class CartDAO {
         return null;
     }
 
+    //TODO public static List<Cart> findByUser(User user)
     public static List<Cart> findByUser(User user){
 
         return null;
