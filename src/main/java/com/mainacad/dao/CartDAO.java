@@ -107,4 +107,16 @@ public class CartDAO {
         }
         return null;
     }
+
+    public static void delete(Integer id) {
+        String sql = "DELETE FROM carts WHERE id=?";
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
