@@ -24,17 +24,27 @@ class UserDAOTest {
         users.stream().forEach(user -> UserDAO.delete(user.getId()));
     }
 
+
+
     @Test
-    void createAndFindAndDelete() {
+    void create() {
         assertNull(users.get(0).getId());
         User userInDB = UserDAO.create(users.get(0));
-
         assertNotNull(userInDB);
         assertNotNull(userInDB.getId());
 
+    }
+    @Test
+    void find () {
+        User userInDB = UserDAO.create(users.get(0));
         User checkedUserInDB = UserDAO.findById(userInDB.getId());
         assertNotNull(checkedUserInDB);
 
+    }
+    @Test
+    void delete() {
+        User userInDB = UserDAO.create(users.get(0));
+        User checkedUserInDB = UserDAO.findById(userInDB.getId());
         UserDAO.delete(checkedUserInDB.getId());
         User deletedUser = UserDAO.findById(userInDB.getId());
         assertNull(deletedUser);
