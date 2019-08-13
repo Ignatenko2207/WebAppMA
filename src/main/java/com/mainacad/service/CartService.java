@@ -15,6 +15,8 @@ public class CartService {
         return CartDAO.create(cart);
     }
 
+    public static Cart findById(Integer Id) { return CartDAO.findById(Id); }
+
     public static Cart findOpenCartByUser(Integer userId){
         return CartDAO.findOpenCartByUser(userId);
     }
