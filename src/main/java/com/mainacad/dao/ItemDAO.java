@@ -61,7 +61,7 @@ public class ItemDAO {
         return null;
     }
 
-    public static Item findAll(){
+    public static List<Item> findAll(){
 
         String sql = "SELECT * FROM items";
 
@@ -69,6 +69,7 @@ public class ItemDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ){
             ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<Item> items = new ArrayList<>();
 
             while (resultSet.next()){
                 Item item = new Item();
@@ -77,7 +78,8 @@ public class ItemDAO {
                 item.setName(resultSet.getString("name"));
                 item.setPrice(resultSet.getInt("price"));
 
-                return item;
+                items.add(item);
+                return items;
             }
         } catch (SQLException e){
             e.getStackTrace();

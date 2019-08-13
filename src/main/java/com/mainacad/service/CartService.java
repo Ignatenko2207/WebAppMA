@@ -24,6 +24,10 @@ public class CartService {
         return CartDAO.update(cart);
     }
 
+    public static Cart close(Integer cartId){
+        return CartDAO.close(cartId);
+    }
+
     public static List<Cart> findByUser(Integer userId){
         return CartDAO.findByUser(userId);
     }

@@ -19,7 +19,7 @@ public class ItemService {
         return ItemDAO.findById(id);
     }
 
-    public static Item findAll(){
+    public static List<Item> findAll(){
         return ItemDAO.findAll();
     }
 

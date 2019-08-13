@@ -145,4 +145,24 @@ public class CartDAO {
         }
         return null;
     }
+
+    public static Cart close(Integer cartId) {
+        String sql = "UPDATE carts SET closed=? WHERE id=?";
+
+        try (Connection connection = ConnectionToDB.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setInt(2, cartId);
+
+            preparedStatement.executeUpdate();
+            Cart cart = findById(cartId);
+
+            return cart;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

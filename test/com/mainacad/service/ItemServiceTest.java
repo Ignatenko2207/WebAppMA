@@ -45,7 +45,7 @@ class ItemServiceTest {
         Item checkedItemInDBByLogin = ItemService.findByItemCode(itemInDB.getItemCode());
         assertNotNull(checkedItemInDBByLogin);
 
-        Item checkedItemInDBByAll = ItemService.findAll();
+        List<Item> checkedItemInDBByAll = ItemService.findAll();
         assertNotNull(checkedItemInDBByAll);
 
         List<Item> checkedGetSum = ItemService.getSumOfAllOrdersByUserIdAndPeriod(itemInDB.getId(),

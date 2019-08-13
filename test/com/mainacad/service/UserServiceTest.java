@@ -1,6 +1,5 @@
 package com.mainacad.service;
 
-import com.mainacad.dao.UserDAO;
 import com.mainacad.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ class UserServiceTest {
         User checkedUserInDBByAll = UserService.findAll();
         assertNotNull(checkedUserInDBByAll);
 
-        User checkedAuth = UserService.getAuthUser(userInDB.getLogin(), userInDB.getPassword());
+        User checkedAuth = UserService.findUserByLoginAndPassword(userInDB.getLogin(), userInDB.getPassword());
         assertNull(checkedAuth);
 
         User checkedUpdate = UserService.update(userInDB);

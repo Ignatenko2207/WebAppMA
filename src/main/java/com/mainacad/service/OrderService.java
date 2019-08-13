@@ -10,10 +10,10 @@ import java.util.List;
 
 public class OrderService {
 
-    public static Order createOrderByItemAndUser(Item item, Integer amount, User user){
+    public static Order createOrderByItemAndUser(Integer itemId, Integer amount, User user){
         Order order = new Order();
 
-        order.setItemId(item.getId());
+        order.setItemId(itemId);
         order.setAmount(amount);
 
         // get or create open cart

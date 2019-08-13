@@ -39,7 +39,7 @@ class ItemDAOTest {
         Item checkedItemInDBByLogin = ItemDAO.findByItemCode(itemInDB.getItemCode());
         assertNotNull(checkedItemInDBByLogin);
 
-        Item checkedItemInDBByAll = ItemDAO.findAll();
+        List<Item> checkedItemInDBByAll = ItemDAO.findAll();
         assertNotNull(checkedItemInDBByAll);
 
         List<Item> checkedGetSum = ItemDAO.getSumOfAllOrdersByUserIdAndPeriod(itemInDB.getId(),
