@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,7 +18,7 @@
 </form>
 <br>
 <h3>
-    <a href="/web-ma/jsp/registration.jsp">REGISTER NEW USER</a>
+    <a href="<c:url value="/jsp/registration.jsp"/>">REGISTER NEW USER</a>
 </h3>
 </body>
 </html>

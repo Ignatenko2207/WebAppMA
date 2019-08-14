@@ -1,6 +1,5 @@
 package com.mainacad.controller;
 
-import com.mainacad.dao.UserDAO;
 import com.mainacad.model.User;
 import com.mainacad.service.UserService;
 
@@ -34,7 +33,11 @@ public class UserController extends HttpServlet {
                 RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
                 dispatcher.forward(req, resp);
             }
-        } else if (action.equals("register")){
+        }
+        if (action.equals("register")){
+
+            RequestDispatcher dispatcherWrong = req.getRequestDispatcher("/jsp/wrong-registration.jsp");
+            RequestDispatcher dispatcherCorrect = req.getRequestDispatcher("/jsp/correct-registration.jsp");
 
             String login = req.getParameter("login");
             String password = req.getParameter("password");
@@ -42,11 +45,23 @@ public class UserController extends HttpServlet {
             String lastName = req.getParameter("lname");
 
             User user = new User(login, password, firstName, lastName);
-            User savedUser = UserDAO.create(user);
+            User savedUser;
 
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/items.jsp");
-            req.setAttribute("user", savedUser);
-            dispatcher.forward(req, resp);
+            if (user.equals(UserService.findByLogin(user.getLogin()))){
+
+                // User already exists
+
+                dispatcherWrong.forward(req, resp);
+
+            } else {
+
+                // Creating User
+
+                savedUser = UserService.create(user);
+                req.setAttribute("regis", savedUser);
+
+                dispatcherCorrect.forward(req, resp);
+            }
         }
     }
 }
