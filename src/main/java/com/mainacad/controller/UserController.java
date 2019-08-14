@@ -33,11 +33,7 @@ public class UserController extends HttpServlet {
                 RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
                 dispatcher.forward(req, resp);
             }
-        }
-        if (action.equals("register")){
-
-            RequestDispatcher dispatcherWrong = req.getRequestDispatcher("/jsp/wrong-registration.jsp");
-            RequestDispatcher dispatcherCorrect = req.getRequestDispatcher("/jsp/correct-registration.jsp");
+        } else if (action.equals("register")){
 
             String login = req.getParameter("login");
             String password = req.getParameter("password");
@@ -47,17 +43,18 @@ public class UserController extends HttpServlet {
             User user = new User(login, password, firstName, lastName);
             User savedUser;
 
-            if (user.equals(UserService.findByLogin(user.getLogin()))){
+            if (UserService.findByLogin(user.getLogin()).equals(user.getLogin())){
 
                 // User already exists
-
+                RequestDispatcher dispatcherWrong = req.getRequestDispatcher("/jsp/wrong-registration.jsp");
                 dispatcherWrong.forward(req, resp);
 
             } else {
 
                 // Creating User
-
                 savedUser = UserService.create(user);
+
+                RequestDispatcher dispatcherCorrect = req.getRequestDispatcher("/jsp/correct-registration.jsp");
                 req.setAttribute("regis", savedUser);
 
                 dispatcherCorrect.forward(req, resp);

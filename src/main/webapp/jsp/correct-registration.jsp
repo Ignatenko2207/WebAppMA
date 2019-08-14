@@ -8,7 +8,7 @@
 <h2>Registration is successful</h2>
 <br>
 
-<form action="correct-registration.jsp" method="post">
+<form action="regis" method="post">
     <input type="text" name="action" value="register" hidden>
     <input type="text" size="40" name="login" placeholder="Input login" required>
     <br>
