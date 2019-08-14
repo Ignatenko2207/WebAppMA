@@ -1,8 +1,8 @@
 <!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" >
 
-<web-app>
+<web-app version="2.5">
   <display-name>My web application</display-name>
 
   <welcome-file-list>
@@ -20,6 +20,15 @@
   <servlet-mapping>
     <servlet-name>user</servlet-name>
     <url-pattern>/user</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>regis</servlet-name>
+    <servlet-class>com.mainacad.controller.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>regis</servlet-name>
+    <url-pattern>/regis</url-pattern>
   </servlet-mapping>
 
 </web-app>

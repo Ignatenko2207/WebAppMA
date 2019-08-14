@@ -1,17 +1,24 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>My web application</title>
 </head>
 <body>
-    <h2>Hello, this is the start page</h2>
+<h2>Hello, this is the start page</h2>
 <br>
-    <form action="user" method="post">
-        <input type="text" name="action" value="create" hidden>
-        <input type="text" size="40" name="login" placeholder="Input login" required>
-        <br>
-        <input type="password" size="40" name="password" placeholder="Input password" required>
-        <br>
-        <input type="submit">
-    </form>
+
+<form action="user" method="post">
+    <input type="text" name="action" value="login" hidden>
+    <input type="text" size="40" name="login" placeholder="Input login" required>
+    <br>
+    <input type="password" size="40" name="password" placeholder="Input password" required>
+    <br>
+    <input type="submit">
+</form>
+<br>
+<h3>
+    <a href="<c:url value="/jsp/registration.jsp"/>">REGISTER NEW USER</a>
+</h3>
 </body>
 </html>

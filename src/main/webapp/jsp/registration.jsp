@@ -5,10 +5,10 @@
     <title>REGISTRATION</title>
 </head>
 <body>
-<h2>Hello, input all date. please!</h2>
+<h2>Hello, input all data, please!</h2>
 <br>
 
-<form action="/regis" method="post">
+<form action="../regis" method="post">
     <input type="text" name="action" value="register" hidden>
     <input type="text" size="40" name="login" placeholder="Input login" required>
     <br>
