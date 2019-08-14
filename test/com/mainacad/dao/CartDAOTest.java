@@ -1,49 +1,66 @@
 package com.mainacad.dao;
 
 import com.mainacad.model.Cart;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.mainacad.model.User;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CartDAOTest {
 
     private static List<Cart> carts = new ArrayList<>();
-    private static Date date = new Date();
+    private static User user = new User("test", "test", "test", "test");
 
-    @BeforeEach
-    void setUp() {
-        Cart cart = new Cart(date.getTime(), false, 2);
-        carts.add(cart);
-    }
+    @BeforeAll
+    static void setUp() {
+        user = UserDAO.findByLogin(user.getLogin());
+        if (user.getId() == null) {
+            user = UserDAO.create(user);
+        }
 
-    @AfterEach
-    void tearDown() {
-        carts.stream().forEach(cart -> ItemDAO.delete(cart.getId()));
+        int cartsCount = 5;
+        for (int i = 1; i <= cartsCount; i++) {
+            Long creationTime = new Date().getTime();
+            Cart cart = new Cart(creationTime, true, user.getId());
+            if (i == cartsCount) {
+                cart.setClosed(false);
+            }
+            cart = CartDAO.create(cart);
+            carts.add(cart);
+        }
     }
 
     @Test
-    void create() {
-
-        assertNull(carts.get(0).getId());
-        Cart cartInDB = CartDAO.create(carts.get(0));
-
-        assertNotNull(cartInDB);
+    void createUpdate() {
+        Cart cart = new Cart(new Date().getTime(), false, user.getId());
+        assertNull(cart.getId());
+        Cart cartInDB = CartDAO.create(cart);
         assertNotNull(cartInDB.getId());
-
-        Cart checkedCartInDBById =  CartDAO.findById(cartInDB.getId());
-        assertNotNull(checkedCartInDBById);
-
-        List<Cart> checkedCartInDBByUser =  CartDAO.findByUser(cartInDB.getUserId());
-        assertNotNull(checkedCartInDBByUser);
-
-        Cart checkedCartInDBByOpenCartAndUser = CartDAO.findOpenCartByUser(cartInDB.getUserId());
-        assertNotNull(checkedCartInDBByOpenCartAndUser);
+        cart.setClosed(true);
+        cartInDB = CartDAO.update(cart);
+        assertTrue(cartInDB.getClosed());
     }
+
+    @Test
+    void findByUser() {
+        List<Cart> usersCartsInDB = CartDAO.findByUser(user.getId());
+        assertNotNull(usersCartsInDB);
+        for (Cart cart :
+                usersCartsInDB) {
+            assertEquals(user.getId(), cart.getUserId());
+        }
+    }
+
+    @Test
+    void findOpenCartByUser() {
+        Cart cart = CartDAO.findOpenCartByUser(user.getId());
+        assertNotNull(cart);
+        assertFalse(cart.getClosed());
+    }
+
 }

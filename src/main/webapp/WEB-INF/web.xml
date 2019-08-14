@@ -26,6 +26,7 @@
     <servlet-name>regis</servlet-name>
     <servlet-class>com.mainacad.controller.UserController</servlet-class>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>regis</servlet-name>
     <url-pattern>/regis</url-pattern>
