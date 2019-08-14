@@ -55,7 +55,7 @@ public class UserController extends HttpServlet {
                 savedUser = UserService.create(user);
 
                 RequestDispatcher dispatcherCorrect = req.getRequestDispatcher("/jsp/correct-registration.jsp");
-                req.setAttribute("regis", savedUser);
+                req.setAttribute("/regis", savedUser);
 
                 dispatcherCorrect.forward(req, resp);
             }

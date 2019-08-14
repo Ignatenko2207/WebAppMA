@@ -7,7 +7,7 @@
 <body>
 <h2>Registration is successful</h2>
 <br>
-<c:set var="regis" />
+<c:set var="/regis" />
 <h3>
     <a href="<c:url value="/index.jsp"/>">GO BACK!</a>
 </h3>
