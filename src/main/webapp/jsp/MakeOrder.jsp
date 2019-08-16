@@ -29,19 +29,30 @@
             <th>Item_Code</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Check</th>
         </tr>
         <c:forEach var="rows" items="${list_items.rows}">
             <tr>
-                <td><c:out value="${rows.id}" /></td>
+                <form name="Multiple values" action="displayResults.jsp" method="post">
+
+                <td><c:out value="${rows.id}" /> </td>
                 <td><c:out value="${rows.item_code}" /></td>
                 <td><c:out value="${rows.name}" /></td>
                 <td><c:out value="${rows.price}" /></td>
+
+                <td><input type="checkbox" name="CheckBoxGroup" value="<c:out value="${rows}" />"/></td>
+                </form>
+
             </tr>
         </c:forEach>
+
     </table>
+
+    <div align="center">
+    <input type="submit" value="Submit" />
+    </div>
+
 </div>
-
-
 
 </body>
 </html>
