@@ -27,8 +27,5 @@ public class OrderController extends HttpServlet {
             req.setAttribute("item", items);
             dispatcher.forward(req, resp);
         }
-
-
-
     }
 }
