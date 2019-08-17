@@ -49,7 +49,7 @@
     </table>
 
     <div align="center">
-    <input type="submit" value="Submit" />
+        <a href="<c:url value="displayResults.jsp"/>">Submit </a>
     </div>
 
 </div>
