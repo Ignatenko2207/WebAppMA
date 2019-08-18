@@ -1,24 +1,31 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en"  class="mdl-js">
 <head>
-    <title>My web application</title>
-</head>
-<body>
-<h2>Hello, this is the start page</h2>
-<br>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<form action="user" method="post">
-    <input type="text" name="action" value="login" hidden>
-    <input type="text" size="40" name="login" placeholder="Input login" required>
-    <br>
-    <input type="password" size="40" name="password" placeholder="Input password" required>
-    <br>
-    <input type="submit">
+    <title>Our web-store application</title>
+
+</head>
+
+<body class="text-center">
+<form class="form-login" action="user" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">Please, log in</h1>
+
+        <input type="text" name="action" value="login" hidden>
+        <label for="inputlogin" class="sr-only">Login</label>
+            <input type="text" name="login" id="inputlogin" class="form-control" placeholder="Input login" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Input password" required>
+        <button class="btn btn-lg btn-dark btn-block" type="submit">Log in</button>
+        <p>
+            <a href="<c:url value = '/jsp/registration.jsp'/>">Register</a>
+        </p>
+            <p class="mt-5 mb-3 text-muted">&copy; 2019 Sters</p>
 </form>
-<br>
-<h3>
-    <a href="<c:url value="/jsp/registration.jsp"/>">REGISTER NEW USER</a>
-</h3>
+
 </body>
 </html>
