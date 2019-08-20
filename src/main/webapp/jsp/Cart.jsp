@@ -14,9 +14,9 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
-            <h3 class="card-text"><c:import url="items.jsp" var="items" /> <c:out value="${items}" /></h3>
-            <p class="card-text"><b>Price: </b><c:import url="items.jsp" var="items" /> <c:out value="${items}" />
-                <span  class="float-right"><b>code: </b><c:import url="items.jsp" var="items" /> <c:out value="${items}" />
+            <h3 class="card-text"><c:import url="items.jsp"  /> <c:out value="${items.name}" /></h3>
+            <p class="card-text"><b>Price: </b><c:import url="items.jsp" /> <c:out value="${items.price}" />
+                <span  class="float-right"><b>code: </b><c:import url="items.jsp" /> <c:out value="${items.item_code}" />
             </p>
 
             <div class="d-flex justify-content-between align-items-center">
