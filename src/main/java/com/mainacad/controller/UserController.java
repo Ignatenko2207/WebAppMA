@@ -61,8 +61,8 @@ public class UserController extends HttpServlet {
             resp.sendRedirect("../items");
         } else {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/login.jsp");
-            req.setAttribute("loginErr", true);
-            req.setAttribute("loginErrMsg", "Wrong login or password. Try again!");
+            req.setAttribute("err", true);
+            req.setAttribute("errMsg", "Wrong login or password. Try again!");
             dispatcher.forward(req, resp);
         }
     }
@@ -72,8 +72,8 @@ public class UserController extends HttpServlet {
         User user = UserService.findByLogin(login);
         if (user != null) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/register.jsp");
-            req.setAttribute("registerErr", true);
-            req.setAttribute("registerErrMsg", "Such user already exists.");
+            req.setAttribute("err", true);
+            req.setAttribute("errMsg", "Such user already exists.");
             dispatcher.forward(req, resp);
         }
 
@@ -85,8 +85,8 @@ public class UserController extends HttpServlet {
             resp.sendRedirect("../items");
         } else {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/register.jsp");
-            req.setAttribute("registerErr", true);
-            req.setAttribute("registerErrMsg", "Something went wrong. Please try again.");
+            req.setAttribute("err", true);
+            req.setAttribute("errMsg", "Something went wrong. Please try again.");
             dispatcher.forward(req, resp);
         }
 
