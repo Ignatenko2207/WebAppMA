@@ -12,7 +12,7 @@ public class OrderService {
         Order order = new Order();
         order.setItemId(itemId);
         order.setAmount(amount);
-        Cart cart = CartService.getOrCreateCartForUser(userId);
+        Cart cart = CartService.findOrCreateOpenCartForUser(userId);
         order.setCartId(cart.getId());
         return OrderDAO.create(order);
     }
@@ -23,6 +23,17 @@ public class OrderService {
 
     public static void delete(Integer id) {
         OrderDAO.delete(id);
+    }
+
+    public static Order updateItemAmount(Integer orderID, Integer amount) {
+        Order order = OrderDAO.findById(orderID);
+        assert order != null;
+        order.setAmount(amount);
+        return OrderDAO.update(order);
+    }
+
+    public static List<List<Object>> findOrdersWithItemsByCartId(Integer cartId) {
+        return OrderDAO.findOrdersWithItemsByCartId(cartId);
     }
 
     public static Order findById(Integer id) {
