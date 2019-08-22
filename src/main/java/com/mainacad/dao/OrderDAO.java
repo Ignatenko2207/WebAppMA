@@ -1,5 +1,6 @@
 package com.mainacad.dao;
 
+import com.mainacad.model.Item;
 import com.mainacad.model.Order;
 
 import java.sql.Connection;
@@ -142,6 +143,51 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return orders;
+    }
+
+    public static List<List<Object>> findOrdersWithItemsByCartId(Integer cartId) {
+
+        String sql = "SELECT o.id, o.amount, i.name , i.id  as item_id, i.code, i.price FROM orders o " +
+                "JOIN carts c ON  o.cart_id = c.id " +
+                "JOIN items i ON o.item_id = i.id " +
+                "WHERE c.id = ?" +
+                "ORDER BY o.id";
+
+
+        List<List<Object>> result = new ArrayList<>();
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, cartId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                List<Object> objectList = new ArrayList<>();
+                Order order = new Order();
+                Item item = new Item();
+
+                order.setId(resultSet.getInt("id"));
+                order.setItemId(resultSet.getInt("item_id"));
+                order.setAmount(resultSet.getInt("amount"));
+                order.setCartId(cartId);
+
+                item.setId(resultSet.getInt("item_id"));
+                item.setItemCode(resultSet.getString("code"));
+                item.setName(resultSet.getString("name"));
+                item.setPrice(resultSet.getInt("price"));
+
+                objectList.add(order);
+                objectList.add(item);
+                result.add(objectList);
+            }
+
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private static Order getOrderFromResultSet(ResultSet resultSet) throws SQLException {
