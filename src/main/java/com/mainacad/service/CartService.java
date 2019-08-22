@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CartService {
 
-    public static Cart getOrCreateCartForUser(Integer userId) {
+    public static Cart findOrCreateOpenCartForUser(Integer userId) {
         if (findOpenCartByUser(userId) != null) return findOpenCartByUser(userId);
         Cart cart = new Cart();
         cart.setCreationTime(new Date().getTime());
@@ -24,6 +24,13 @@ public class CartService {
     public static Cart closeOpenCartOfUser(Integer userId) {
         Cart cart = CartDAO.findOpenCartByUser(userId);
         if (cart == null) return null;
+        cart.setClosed(true);
+        return CartDAO.update(cart);
+    }
+
+    public static Cart closeCart(Integer cartId) {
+        Cart cart = CartDAO.findById(cartId);
+        if (cart == null || cart.getClosed()) return null;
         cart.setClosed(true);
         return CartDAO.update(cart);
     }
