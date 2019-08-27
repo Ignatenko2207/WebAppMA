@@ -48,4 +48,36 @@ public class OrderService {
     public static void delete (Integer id){
         OrderDAO.delete(id);
     }
+
+    public static Order createOrderByItemAndUser(Item item, Integer amount, User user){
+
+        Order order = new Order();
+        order.setItemId(item.getId());
+        order.setAmount(amount);
+
+        Cart cart = CartService.findOpenCartByUser(user.getId());
+
+        if (cart == null) {
+            cart = CartService.createCartForUser(user.getId());
+        }
+        order.setCartId(cart.getId());
+
+        return OrderDAO.create(order);
+    }
+
+    public static Order addItemToOrder(Item item, User user){
+
+        Order existingOrder = CartService.getOrdersFromOpenCartByUser(user.getId()).stream().
+                filter(order -> order.getItemId().equals(item.getId())).findAny().orElse(null);
+
+        if (existingOrder == null) {
+            existingOrder = createOrderByItemAndUser(item, 1, user);
+
+        } else {
+            existingOrder.setAmount(existingOrder.getAmount() + 1);
+            OrderDAO.update(existingOrder);
+        }
+
+        return existingOrder;
+    }
 }
