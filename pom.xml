@@ -20,6 +20,10 @@
     <lombok.version>1.18.8</lombok.version>
     <postgresql.jdbc.version>42.2.6</postgresql.jdbc.version>
     <servlet.version>4.0.1</servlet.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
+    <jackson.version>2.9.9</jackson.version>
+    <servlet-api.version>2.3.3</servlet-api.version>
+    <jstl.version>1.2</jstl.version>
   </properties>
 
   <dependencies>
@@ -54,13 +58,43 @@
       <version>${postgresql.jdbc.version}</version>
     </dependency>
 
-<!--      WEB-API-->
+    <!--      WEB-API-->
       <dependency>
           <groupId>javax.servlet</groupId>
           <artifactId>javax.servlet-api</artifactId>
           <version>${servlet.version}</version>
           <scope>provided</scope>
       </dependency>
+<!--    Apache Commons dbcp-->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>${commons-dbcp.version}</version>
+    </dependency>
+<!--JSTL-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>${jstl.version}</version>
+    </dependency>
+<!--    Servlet-->
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>${servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+<!--    JSON-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
 
   </dependencies>
 

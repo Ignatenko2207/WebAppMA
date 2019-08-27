@@ -23,11 +23,37 @@ public class OrderService {
         return OrderDAO.create(order);
     }
 
-    public static List<Order> getOrdersByCatr(Cart cart){
+    public static Order addItemToOrder(Item item, User user){
+        Order existingOrder = CartService.getOrdersFromOpenCartByUser(user.getId()).stream().filter(order -> order.getItemId().equals(item.getId())).findAny().orElse(null);
+        if (existingOrder == null) {
+            existingOrder = createOrderByItemAndUser(item, 1, user);
+        } else {
+            existingOrder.setAmount(existingOrder.getAmount() + 1);
+            OrderDAO.update(existingOrder);
+        }
+
+        return existingOrder;
+    }
+
+    public static List<Order> getOrdersByCart(Cart cart){
         return OrderDAO.findByCart(cart.getId());
     }
 
-    public List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
-        return OrderDAO.findClosedOrdersByUserAndPeriod(user.getId(), from, to);
+    public static Order findById(Integer id) {
+        return OrderDAO.findById(id);
+    }
+
+    public static List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
+        return OrderDAO.findClosedOrdersByUserIdAndPeriod(user.getId(), from, to);
+    }
+
+    public static void deleteOrder(Integer orderId) {
+        OrderDAO.delete(orderId);
+    }
+
+    public static Order updateItemAmountInOrder(Integer id, Integer amount) {
+        Order order = OrderDAO.findById(id);
+        order.setAmount(amount);
+        return OrderDAO.update(order);
     }
 }
