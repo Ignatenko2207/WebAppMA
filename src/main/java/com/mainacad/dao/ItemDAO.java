@@ -1,4 +1,5 @@
 package com.mainacad.dao;
+
 import com.mainacad.model.Item;
 
 import java.sql.*;
@@ -6,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAO {
+
     public static Item create(Item item) {
-        String statement = "INSERT INTO items(item_code, name, price)" +
+        String statement = "INSERT INTO items(code, name, price)" +
                 "VALUES(?,?,?)";
 
         String curIdStatement = "SELECT currval(pg_get_serial_sequence('items','id'))";
@@ -23,7 +25,7 @@ public class ItemDAO {
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = seqStatement.executeQuery(curIdStatement);
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 Integer id = resultSet.getInt(1);
                 item.setId(id);
 
@@ -38,7 +40,7 @@ public class ItemDAO {
     }
 
     public static Item update(Item item) {
-        String statement = "UPDATE items SET item_code=?, name=?, price=? WHERE id=?";
+        String statement = "UPDATE items SET code=?, name=?, price=? WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
@@ -58,7 +60,7 @@ public class ItemDAO {
         return null;
     }
 
-    public static Item findById(Integer id){
+    public static Item findById(Integer id) {
         String statement = "SELECT * FROM items WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
@@ -68,10 +70,8 @@ public class ItemDAO {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                Item item = getItemFromResultSetItem(resultSet);
-
-                return item;
+            if (resultSet.next()) {
+                return getItemFromResultSet(resultSet);
             }
 
         } catch (SQLException e) {
@@ -83,7 +83,7 @@ public class ItemDAO {
     public static List<Item> findByItemCode(String code) {
         List<Item> items = new ArrayList<>();
 
-        String statement = "SELECT * FROM items WHERE item_code=?";
+        String statement = "SELECT * FROM items WHERE code=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
@@ -93,7 +93,7 @@ public class ItemDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
+                items.add(getItemFromResultSet(resultSet));
             }
 
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ public class ItemDAO {
         return items;
     }
 
-    public static List<Item> findByItemPriceBetween(Integer minPrice, Integer maxPrice){
+    public static List<Item> findByItemPriceBetween(Integer minPrice, Integer maxPrice) {
         List<Item> items = new ArrayList<>();
 
         String statement = "SELECT * FROM items WHERE price>=? AND price<=?";
@@ -117,7 +117,7 @@ public class ItemDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
+                items.add(getItemFromResultSet(resultSet));
             }
 
         } catch (SQLException e) {
@@ -127,7 +127,7 @@ public class ItemDAO {
         return items;
     }
 
-    public static List<Item> findAll(){
+    public static List<Item> findAll() {
         List<Item> items = new ArrayList<>();
 
         String statement = "SELECT * FROM items";
@@ -138,7 +138,7 @@ public class ItemDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                items.add(getItemFromResultSetItem(resultSet));
+                items.add(getItemFromResultSet(resultSet));
             }
 
         } catch (SQLException e) {
@@ -148,13 +148,13 @@ public class ItemDAO {
         return items;
     }
 
-    public static void delete(Item item){
+    public static void delete(Integer itemId) {
         String statement = "DELETE FROM items WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
 
-            preparedStatement.setInt(1, item.getId());
+            preparedStatement.setInt(1, itemId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -162,27 +162,14 @@ public class ItemDAO {
         }
     }
 
-    private static Item getItemFromResultSetItem(ResultSet resultSet) throws SQLException {
+    private static Item getItemFromResultSet(ResultSet resultSet) throws SQLException {
         Item item = new Item();
 
         item.setId(resultSet.getInt("id"));
-        item.setItemCode(resultSet.getString("item_code"));
+        item.setItemCode(resultSet.getString("code"));
         item.setName(resultSet.getString("name"));
         item.setPrice(resultSet.getInt("price"));
 
         return item;
     }
-
-    public static Integer getSumOfAllOrdersByUserIdAndPeriod(Integer userId, Long from, Long to){
-        String sql = "SELECT SUM(i.price*o.amount)FROM items i " +
-                "JOIN orders o ON o.item_id = i.id " +
-                "JOIN carts c ON o.cart_id = c.id " +
-                "WHERE c.user_id=? AND " +
-                "c.creation_time>? AND " +
-                "c.creation_time<? AND " +
-                "c.closed=true";
-
-        return null;
-    }
-
 }
