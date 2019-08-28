@@ -20,6 +20,7 @@
     <lombok.version>1.18.8</lombok.version>
     <postgresql.jdbc.version>42.2.6</postgresql.jdbc.version>
     <servlet.version>4.0.1</servlet.version>
+    <jackson-version>2.9.9</jackson-version>
   </properties>
 
   <dependencies>
@@ -74,6 +75,14 @@
       <version>2.3.3</version>
       <scope>provided</scope>
     </dependency>
+
+    <!--  JACKSON-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+
 
   </dependencies>
 

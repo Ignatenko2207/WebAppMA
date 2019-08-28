@@ -1,6 +1,5 @@
 package com.mainacad.controller;
 
-import com.mainacad.dao.UserDAO;
 import com.mainacad.model.User;
 import com.mainacad.service.UserService;
 
@@ -37,7 +36,7 @@ public class UserController extends HttpServlet {
 
         String action = req.getParameter("action");
 
-        if(action.equals("login")){
+        if (action.equals("login")){
             String login = req.getParameter("login");
             String password = req.getParameter("password");
 

@@ -33,6 +33,16 @@
   </servlet-mapping>
 
   <servlet>
+      <servlet-name>cart</servlet-name>
+      <servlet-class>com.mainacad.controller.CartController</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+      <servlet-name>cart</servlet-name>
+      <url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>regis</servlet-name>
     <servlet-class>com.mainacad.controller.UserController</servlet-class>
   </servlet>
